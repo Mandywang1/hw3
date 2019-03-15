@@ -1,0 +1,471 @@
+/////////////////////////////////////////////Project 1//////////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+#include<cv.hpp>
+#include<imgproc.hpp>
+
+using namespace std;
+using namespace cv;
+
+Mat getHistImg(const MatND&hist)
+{
+	double maxVal = 0;
+	double minVal = 0;
+
+	minMaxLoc(hist, &minVal, &maxVal, 0, 0);
+	int histSize = hist.rows;
+	Mat histImg(histSize, histSize, CV_8U, Scalar(255));
+
+	int hpt = static_cast<int>(0.9*histSize);
+
+	for (int h = 0; h<histSize; h++)
+	{
+		float binVal = hist.at<float>(h);
+		int intensity = static_cast<int>(binVal*hpt / maxVal);
+		line(histImg, Point(h, histSize), Point(h, histSize - intensity), Scalar::all(0));
+	}
+
+	return histImg;
+}
+
+int main(int argc, _TCHAR* argv[])
+{
+	Mat citywall1, citywall2, elain1, elain2, elain3, lena1, lena2, lena4, woman1, woman2;
+	citywall1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall1.bmp");
+	citywall2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall2.bmp");
+	elain1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain1.bmp");
+	elain2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain2.bmp");
+	elain3 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain3.bmp");
+	lena1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena1.bmp");
+	lena2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena2.bmp");
+	lena4 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena4.bmp");
+	woman1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman1.bmp");
+	woman2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman2.bmp");
+	int image_count = 1;
+	int channels[1] = { 0 };
+
+	Mat O_citywall1, O_citywall2, O_elain1, O_elain2, O_elain3, O_lena1, O_lena2, O_lena4, O_woman1, O_woman2;
+	int dims = 1;
+	int histsize[1] = { 256 };
+	float hrange[2] = { 0, 255 };
+	const float *ranges[1] = { hrange };
+
+	calcHist(&citywall1, image_count, channels, Mat(), O_citywall1, dims, histsize, ranges);
+	calcHist(&citywall2, image_count, channels, Mat(), O_citywall2, dims, histsize, ranges);
+	calcHist(&elain1, image_count, channels, Mat(), O_elain1, dims, histsize, ranges);
+	calcHist(&elain2, image_count, channels, Mat(), O_elain2, dims, histsize, ranges);
+	calcHist(&elain3, image_count, channels, Mat(), O_elain3, dims, histsize, ranges);
+	calcHist(&lena1, image_count, channels, Mat(), O_lena1, dims, histsize, ranges);
+	calcHist(&lena2, image_count, channels, Mat(), O_lena2, dims, histsize, ranges);
+	calcHist(&lena4, image_count, channels, Mat(), O_lena4, dims, histsize, ranges);
+	calcHist(&woman1, image_count, channels, Mat(), O_woman1, dims, histsize, ranges);
+	calcHist(&woman2, image_count, channels, Mat(), O_woman2, dims, histsize, ranges);
+
+	Mat OUT_citywall1, OUT_citywall2, OUT_elain1, OUT_elain2, OUT_elain3, OUT_lena1, OUT_lena2, OUT_lena4, OUT_woman1, OUT_woman2;
+	OUT_citywall1 = getHistImg(O_citywall1);
+	OUT_citywall2 = getHistImg(O_citywall2);
+	OUT_elain1 = getHistImg(O_elain1);
+	OUT_elain2 = getHistImg(O_elain2);
+	OUT_elain3 = getHistImg(O_elain3);
+	OUT_lena1 = getHistImg(O_lena1);
+	OUT_lena2 = getHistImg(O_lena2);
+	OUT_lena4 = getHistImg(O_lena4);
+	OUT_woman1 = getHistImg(O_woman1);
+	OUT_woman2 = getHistImg(O_woman2);
+
+	imshow("OUT_citywall1", OUT_citywall1);
+	imshow("OUT_citywall2", OUT_citywall2);
+	imshow("OUT_elain1", OUT_elain1);
+	imshow("OUT_elain2", OUT_elain2);
+	imshow("OUT_elain3", OUT_elain3);
+	imshow("OUT_lena1", OUT_lena1);
+	imshow("OUT_lena2", OUT_lena2);
+	imshow("OUT_lena4", OUT_lena4);
+	imshow("OUT_woman1", OUT_woman1);
+	imshow("OUT_woman2", OUT_woman2);
+	waitKey();
+	return 0;
+}
+
+////////////////////////////////////////////Project 2//////////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+#include<cv.hpp>
+#include<imgproc.hpp>
+
+using namespace std;
+using namespace cv;
+int main()
+{
+	Mat citywall,citywall1, citywall2, elain,elain1, elain2, elain3, lena, lena1, lena2, lena4, woman,woman1, woman2;
+	citywall = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall.bmp",0);
+	citywall1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall1.bmp", 0);
+	citywall2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall2.bmp", 0);
+	elain = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain.bmp", 0);
+	elain1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain1.bmp", 0);
+	elain2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain2.bmp", 0);
+	elain3 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain3.bmp", 0);
+	lena = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena.bmp", 0);
+	lena1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena1.bmp", 0);
+	lena2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena2.bmp", 0);
+	lena4 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena4.bmp", 0);
+	woman = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman.bmp", 0);
+	woman1 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman1.bmp", 0);
+	woman2 = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman2.bmp", 0);
+	namedWindow("citywall",0);
+	namedWindow("citywall1", 0);
+	namedWindow("citywall2", 0);
+	namedWindow("elain", 0);
+	namedWindow("elain1", 0);
+	namedWindow("elain2", 0);
+	namedWindow("elain3", 0);
+	namedWindow("lena", 0);
+	namedWindow("lena1", 0);
+	namedWindow("lena2", 0);
+	namedWindow("lena4", 0);
+	namedWindow("woman", 0);
+	namedWindow("woman1", 0);
+	namedWindow("woman2", 0);
+
+	imshow("citywall", citywall);
+	imshow("citywall1", citywall1);
+	imshow("citywall2", citywall2);
+	imshow("elain", elain);
+	imshow("elain1", elain1);
+	imshow("elain2", elain2);
+	imshow("elain3", elain3);
+	imshow("lena", lena);	
+	imshow("lena1", lena1);
+	imshow("lena2", lena2);
+	imshow("lena4", lena4);
+	imshow("woman", woman);
+	imshow("woman1", woman1);
+	imshow("woman2", woman2);
+	Mat OUT_citywall,OUT_citywall1, OUT_citywall2, OUT_elain, OUT_elain1, OUT_elain2, OUT_elain3, OUT_lena, OUT_lena1, OUT_lena2, OUT_lena4, OUT_woman, OUT_woman1, OUT_woman2;
+
+	equalizeHist(citywall, OUT_citywall);
+	namedWindow("OUT_citywall", 0);
+	imshow("OUT_citywall", OUT_citywall);
+	equalizeHist(citywall1, OUT_citywall1);
+	equalizeHist(citywall2, OUT_citywall2);
+	equalizeHist(elain, OUT_elain);
+	equalizeHist(elain1, OUT_elain1);
+	equalizeHist(elain2, OUT_elain2);
+	equalizeHist(elain3, OUT_elain3);
+	equalizeHist(lena, OUT_lena);
+	equalizeHist(lena1, OUT_lena1);
+	equalizeHist(lena2, OUT_lena2);
+	equalizeHist(lena4, OUT_lena4);
+	equalizeHist(woman, OUT_woman);
+	equalizeHist(woman1, OUT_woman1);
+	equalizeHist(woman2, OUT_woman2);
+
+
+	namedWindow("OUT_citywall1", 0);
+	namedWindow("OUT_citywall2", 0);
+	namedWindow("OUT_elain", 0);
+	namedWindow("OUT_elain1", 0);
+	namedWindow("OUT_elain2", 0);
+	namedWindow("OUT_elain3", 0);
+	namedWindow("OUT_lena", 0);
+	namedWindow("OUT_lena1", 0);
+	namedWindow("OUT_lena2", 0);
+	namedWindow("OUT_lena4", 0);
+	namedWindow("OUT_woman", 0);
+	namedWindow("OUT_woman1", 0);
+	namedWindow("OUT_woman2", 0);
+
+
+	imshow("OUT_citywall1", OUT_citywall1);
+	imshow("OUT_citywall2", OUT_citywall2);
+	imshow("OUT_elain", OUT_elain);
+	imshow("OUT_elain1", OUT_elain1);
+	imshow("OUT_elain2", OUT_elain2);
+	imshow("OUT_elain3", OUT_elain3);
+	imshow("OUT_lena", OUT_lena);
+	imshow("OUT_lena1", OUT_lena1);
+	imshow("OUT_lena2", OUT_lena2);
+	imshow("OUT_lena4", OUT_lena4);
+	imshow("OUT_woman", OUT_woman);
+	imshow("OUT_woman1", OUT_woman1);
+	imshow("OUT_woman2", OUT_woman2);
+	waitKey(0);
+	return 0;
+}
+/////////////////////////////////////////////Project 3//////////////////////////////////////////////
+
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+#include<cv.hpp>
+#include<imgproc.hpp>
+
+#define cvQueryHistValue_1D( hist, idx0 ) \
+    ((float)cvGetReal1D( (hist)->bins, (idx0)))
+using namespace std;
+using namespace cv;
+void HIST_Match(IplImage *Match_o, IplImage* Match_r)
+
+{
+	double val_1 = 0.0;
+	double val_2 = 0.0;
+	uchar T[256] = { 0 };
+	double S[256] = { 0 };
+	double G[256] = { 0 };
+	int bins = 256;
+	int sizes[] = { bins };
+	CvHistogram *hist = cvCreateHist(1, sizes, CV_HIST_ARRAY);
+	CvHistogram *hist_m = cvCreateHist(1, sizes, CV_HIST_ARRAY);
+	cvCalcHist(&Match_o, hist);
+	cvCalcHist(&Match_r, hist_m);
+	cvNormalizeHist(hist, 1);
+	cvNormalizeHist(hist_m, 1);
+	for (int index = 0; index<256; ++index)
+	{
+		val_1 += cvQueryHistValue_1D(hist, index);
+		val_2 += cvQueryHistValue_1D(hist_m, index);
+		G[index] = val_2;
+		S[index] = val_1;
+	}
+	double min_val = 0.0;
+	int PG = 0;
+	for (int i = 0; i<256; ++i)
+	{
+		min_val = 1.0;
+		for (int j = 0; j<256; ++j)
+		{
+			if ((G[j] - S[i]) < min_val && (G[j] - S[i]) >= 0)
+			{
+				min_val = (G[j] - S[i]);
+				PG = j;
+			}
+		}
+		T[i] = (uchar)PG;
+	}
+	uchar *p = NULL;
+	for (int x = 0; x<Match_o->height; ++x)
+	{
+		p = (uchar*)(Match_o->imageData + Match_o->widthStep*x);
+		for (int y = 0; y<Match_o->width; ++y)
+		{
+			p[y] = T[p[y]];
+		}
+	}
+}
+
+int main()
+{
+	
+	IplImage* citywall = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall.bmp", 0);
+	IplImage* citywall1 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall1.bmp", 0);
+	IplImage* citywall2 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\citywall2.bmp", 0);
+	IplImage* elain = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain.bmp", 0);
+	IplImage* elain1 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain1.bmp", 0);
+	IplImage* elain2 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain2.bmp", 0);
+	IplImage* elain3 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain3.bmp", 0);
+	IplImage* lena = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena.bmp", 0);
+	IplImage* lena1 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena1.bmp", 0);
+	IplImage* lena2 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena2.bmp", 0);
+	IplImage* lena4 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena4.bmp", 0);
+	IplImage* woman = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman.bmp", 0);
+	IplImage* woman1 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman1.bmp", 0);
+	IplImage* woman2 = cvLoadImage("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman2.bmp", 0);
+	HIST_Match(citywall, citywall);
+	HIST_Match(citywall1, citywall);
+	HIST_Match(citywall2, citywall);
+	HIST_Match(elain, elain);
+	HIST_Match(elain1, elain);
+	HIST_Match(elain2, elain);
+	HIST_Match(elain3, elain);
+	HIST_Match(lena, lena);
+	HIST_Match(lena1, lena);
+	HIST_Match(lena2, lena);
+	HIST_Match(lena4, lena);
+	HIST_Match(woman, woman);
+	HIST_Match(woman1, woman);
+	HIST_Match(woman2, woman);
+	namedWindow("citywall", 0);
+	namedWindow("citywall1", 0);
+	namedWindow("citywall2", 0);
+	namedWindow("elain", 0);
+	namedWindow("elain1", 0);
+	namedWindow("elain2", 0);
+	namedWindow("elain3", 0);
+	namedWindow("lena", 0);
+	namedWindow("lena1", 0);
+	namedWindow("lena2", 0);
+	namedWindow("lena4", 0);
+	namedWindow("woman", 0);
+	namedWindow("woman1", 0);
+	namedWindow("woman2", 0);
+
+	cvShowImage("citywall", citywall);
+	cvShowImage("citywall1", citywall1);
+	cvShowImage("citywall2", citywall2);
+	cvShowImage("elain", elain);
+	cvShowImage("elain1", elain1);
+	cvShowImage("elain2", elain2);
+	cvShowImage("elain3", elain3);
+	cvShowImage("lena", lena);
+	cvShowImage("lena1", lena1);
+	cvShowImage("lena2", lena2);
+	cvShowImage("lena4", lena4);
+	cvShowImage("woman", woman);
+	cvShowImage("woman1", woman1);
+	cvShowImage("woman2", woman2);
+	waitKey();
+	return 0;
+}
+
+/////////////////////////////////////////////Project 4//////////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+#include<cv.hpp>
+#include<imgproc.hpp>
+
+using namespace std;
+using namespace cv;
+bool hist(Mat matSrc, Mat &matRet)
+{
+	int nHeight = matSrc.rows;
+	int nWidth = matSrc.cols;
+
+	matRet = Mat::zeros(nHeight, nWidth, CV_8UC1);
+	int up, down,number,level,o,p;
+	double t = 0.0;
+	for (int j = 0; j < nHeight; j++)
+	{
+		for (int i = 0; i < nWidth; i++)
+		{
+			number =level= 0;
+			p = matSrc.at<uchar>(j, i);
+			for (up = j-3; up <=j+3; up++)
+			{
+				for (down = i - 3; down <= i + 3; down++)
+				{
+					if (up>=0&&up<nHeight&&down>=0&&down<nWidth)
+					{
+						number++;
+						o= matSrc.at<uchar>(up, down);
+						//cout << t << "    ";
+						if (o<= p)
+						{
+							level=level+1;
+						}
+					}
+				}
+			}
+			t=255*level;
+			//cout << t << "  ";
+			matRet.at<uchar>(j, i) =t/number;
+		}
+	}
+
+	return true;
+}
+
+int main()
+{
+	Mat elain, lena,waw;
+	elain = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain.bmp");
+	lena = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\lena.bmp");
+	//cvtColor(elain, elain, CV_BGR2GRAY);
+	//histMatch_Value(elain, waw);
+	//namedWindow("wa", 0);
+	//imshow("wa", waw);
+	Mat p_elain[3], OUT_elain[3],p_lena[3],OUT_lena[3];
+
+	split(elain, p_elain);
+	split(lena, p_lena);
+
+	hist(p_elain[0],  OUT_elain[0]);
+	hist(p_elain[1],  OUT_elain[1]);
+	hist(p_elain[2],  OUT_elain[2]);
+	hist(p_lena[0], OUT_lena[0]);
+	hist(p_lena[1], OUT_lena[1]);
+	hist(p_lena[2], OUT_lena[2]);
+
+	Mat O_elain,O_lena;
+	merge(OUT_elain, 3, O_elain);
+	merge(OUT_lena, 3, O_lena);
+
+
+	namedWindow("OUT_elain");
+	namedWindow("OUT_lena");
+	imshow("OUT_elain",O_elain);
+	imshow("OUT_lena", O_lena);
+	waitKey();
+	return 0;
+}
+/////////////////////////////////////////////Project 5//////////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+#include<cv.hpp>
+#include<imgproc.hpp>
+
+using namespace std;
+using namespace cv;
+bool histMatch_Value(Mat matSrc, Mat &matRet)
+{
+	int nHeight = matSrc.rows;
+	int nWidth = matSrc.cols;
+
+	matRet = Mat::zeros(nHeight, nWidth, CV_8UC1);
+	int  o;
+	for (int j = 0; j < nHeight; j++)
+	{
+		for (int i = 0; i < nWidth; i++)
+		{
+			o = matSrc.at<uchar>(j, i);
+			if (o >= 100)
+			{
+				matRet.at<uchar>(j, i) =255;
+			}
+			else 
+			{
+				matRet.at<uchar>(j, i) =0;	
+			}
+
+		}
+	}
+
+	return true;
+}
+
+int main()
+{
+	Mat elain, woman, waw;
+	elain = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\elain.bmp");
+	woman = imread("G:\\图像视频处理\\第三次作业\\第3-次作业\\woman.bmp");
+	//cvtColor(elain, elain, CV_BGR2GRAY);
+	//histMatch_Value(elain, waw);
+	//namedWindow("wa", 0);
+	//imshow("wa", waw);
+	Mat p_elain[3], OUT_elain[3], p_woman[3], OUT_woman[3];
+
+	split(elain, p_elain);
+	split(woman, p_woman);
+
+	histMatch_Value(p_elain[0], OUT_elain[0]);
+	histMatch_Value(p_elain[1], OUT_elain[1]);
+	histMatch_Value(p_elain[2], OUT_elain[2]);
+	histMatch_Value(p_woman[0], OUT_woman[0]);
+	histMatch_Value(p_woman[1], OUT_woman[1]);
+	histMatch_Value(p_woman[2], OUT_woman[2]);
+
+	Mat O_elain, O_woman;
+	merge(OUT_elain, 3, O_elain);
+	merge(OUT_woman, 3, O_woman);
+
+
+	namedWindow("OUT_elain",0);
+	namedWindow("OUT_woman",0);
+	imshow("OUT_elain", O_elain);
+	imshow("OUT_woman", O_woman);
+	waitKey();
+	return 0;
+}
